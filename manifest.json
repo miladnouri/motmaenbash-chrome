@@ -11,7 +11,7 @@
     "16": "assets/images/icon_16.png",
     "48": "assets/images/icon_48.png"
   },
-  "browser_action": {
+  "page_action": {
     "default_icon": "assets/images/icon_128.png",
     "default_popup": "popup.html",
     "default_title": "MotmaenBash"

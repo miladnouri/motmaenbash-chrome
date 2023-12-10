@@ -1,16 +1,15 @@
 @font-face {
-    font-family: Shabnam;
-    font-weight: normal;
-    src: url('../fonts/Shabnam.eot');
-    src: url('../fonts/Shabnam.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/Shabnam.woff') format('woff'),
-         url('../fonts/Shabnam.ttf') format('truetype');
-   }
+    font-family: 'Vazirmatn';
+    src: url('../fonts/Vazirmatn[wght].woff2') format('woff2 supports variations'),
+         url('../fonts/Vazirmatn[wght].woff2') format('woff2-variations');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+  }
   
   body {
     background: #fff;
-    font-family: "Shabnam";
-    font-size: 12px;
+    font-family: "Vazirmatn";
     width: 330px;
     padding: 2px 6px;
   }
@@ -27,14 +26,15 @@
   }
   
   .footer-box{
-    margin: 10px 0 6px 0;
+    margin: 10px 0 8px 0;
     color: gray;
-    font-size: 11px;
+    font-size: 0.72rem;
+    font-weight: 500;
   }
   
   .footer-box a{
     color: #ff7200;
-    font-size: 10px;
+    font-weight: 400;
   }
   
   #status_icon {
@@ -51,13 +51,14 @@
   
   .status_title_ok{
     color: #26bfa6;
-    font-size: 18px;
+    font-size: 1.2rem;
+    font-weight: 600;
   }
   
   .status_title_nok{
     color: #f44336;
-    font-size: 13px;
-    font-weight: bold;
+    font-size: 0.85rem;
+    font-weight: 600;
     line-height: 28px;
   }
   
@@ -67,7 +68,8 @@
     margin: 6px 2px;
     text-align: center;
     width: calc(50% - 4px);
-    font-size: 13px;
+    font-size: 0.75rem;
+    font-weight: 500;
     color: gray;
     border-radius: 4px;
     box-sizing: border-box;
