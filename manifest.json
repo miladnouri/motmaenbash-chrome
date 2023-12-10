@@ -24,7 +24,7 @@
     "css": [ "assets/css/payment-gateway-verify.css" ],
     "exclude_globs": [ "*://www.shaparak.ir/*", "*://shaparak.ir/*" ],
     "js": [ "assets/js/content-script.js" ],
-    "matches": [ "https://*.shaparak.ir/*", "https://*.cbinasim.ir/*" ]
+    "matches": [ "https://*.shaparak.ir/*" ]
   } ],
   "web_accessible_resources": [ "assets/images/sign.png" ]
 
