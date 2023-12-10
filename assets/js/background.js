@@ -5,17 +5,18 @@ chrome.tabs.onUpdated.addListener(checkForValidUrl);
 function checkForValidUrl(tabId, changeInfo, tab) {
 
   if (tab.url != undefined && changeInfo.status == "complete") {
-    //show the page action.
-    chrome.pageAction.show(tabId);
     var url = new URL(tab.url);
+    console.log(tab.url);
+    console.log(url);
+    //show the page action.
     if( url.hostname.match(/\.shaparak\.ir$/i) && url.protocol == "https:" ){
-      chrome.pageAction.setIcon({
+      chrome.action.setIcon({
       tabId: tabId,
       path: {
           128: "/assets/images/icon_ok.png"
         }
       });
-      chrome.pageAction.setTitle({
+      chrome.action.setTitle({
           tabId: tabId,
           title: "درگاه پرداخت امن، مطمئن باش"
       });
