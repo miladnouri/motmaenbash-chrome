@@ -1,0 +1,15 @@
+#motmaenBashCornerSign {
+  position: fixed !important;
+  box-sizing: border-box;
+  overflow-y:scroll;
+  overflow-x:hidden;
+  top: 0px !important;
+  left: 0;
+  opacity: 0.95;
+  z-index: 999999999 !important;
+}
+
+#motmaenBashCornerSign img#motmaenBashCornerSignLogo{
+  width: 160px !important;
+  max-width: 160px !important;
+}

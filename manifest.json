@@ -1,0 +1,31 @@
+{
+  "name": "MotmaenBash | مطمئن باش",
+  "short_name": "MotmaenBash",
+  "description": "مطمئن باش | بررسی اصلالت درگاه‌های پرداخت ایرانی",
+  "homepage_url": "https://motmaenbash.milad.nu",
+  "version": "1.1.0",
+  "manifest_version": 2,
+  "author": "Milad Nouri",
+  "icons": {
+    "128": "assets/images/icon_128.png",
+    "16": "assets/images/icon_16.png",
+    "48": "assets/images/icon_48.png"
+  },
+  "browser_action": {
+    "default_icon": "assets/images/icon_128.png",
+    "default_popup": "popup.html",
+    "default_title": "MotmaenBash"
+  },
+  "permissions": [ "tabs" ],
+  "background": {
+    "scripts": [ "assets/js/background.js" ]
+  },
+  "content_scripts": [ {
+    "css": [ "assets/css/payment-gateway-verify.css" ],
+    "exclude_globs": [ "*://www.shaparak.ir/*", "*://shaparak.ir/*" ],
+    "js": [ "assets/js/content-script.js" ],
+    "matches": [ "https://*.shaparak.ir/*", "https://*.cbinasim.ir/*" ]
+  } ],
+  "web_accessible_resources": [ "assets/images/sign.png" ]
+
+}

@@ -1,0 +1,88 @@
+@font-face {
+    font-family: Shabnam;
+    font-weight: normal;
+    src: url('../fonts/Shabnam.eot');
+    src: url('../fonts/Shabnam.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Shabnam.woff') format('woff'),
+         url('../fonts/Shabnam.ttf') format('truetype');
+   }
+  
+  body {
+    background: #fff;
+    font-family: "Shabnam";
+    font-size: 12px;
+    width: 330px;
+    padding: 2px 6px;
+  }
+  
+  a, a:visited{
+    text-decoration: none;
+  }
+  
+  hr{
+    clear: both;
+    margin: 0;
+    border-top: 1px dashed #e6e6e6;
+    border-bottom: 0px;
+  }
+  
+  .footer-box{
+    margin: 10px 0 6px 0;
+    color: gray;
+    font-size: 11px;
+  }
+  
+  .footer-box a{
+    color: #ff7200;
+    font-size: 10px;
+  }
+  
+  #status_icon {
+    margin: 20px auto 6px auto;
+    display: block;
+    max-width: 80px;
+    /* max-height: 76px; */
+  }
+  
+  .status_title_ok, .status_title_nok {
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  
+  .status_title_ok{
+    color: #26bfa6;
+    font-size: 18px;
+  }
+  
+  .status_title_nok{
+    color: #f44336;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 28px;
+  }
+  
+  .button-link, .button-link:visited {
+    float: right;
+    background: #f7f7f7;
+    margin: 6px 2px;
+    text-align: center;
+    width: calc(50% - 4px);
+    font-size: 13px;
+    color: gray;
+    border-radius: 4px;
+    box-sizing: border-box;
+    border: 1px solid gray;
+    padding: 4px 4px;
+  }
+  
+  .button-link:hover, .button-link:visited:hover {
+    background: #f4f4f4;
+  }
+  
+  .right {
+    float: right;
+  }
+
+  .left {
+    float: left;
+  }
