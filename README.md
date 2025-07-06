@@ -27,6 +27,14 @@ To install the extension:
 
 Once installed, the extension will automatically detect pages on `shaparak.ir` that use HTTPS. If a secure payment gateway is detected, it will display the extension icon in the toolbar. Additionally, it will add a corner sign/logo on the page to signify its security.
 
+## Support the Project
+
+If you find MotmaenBash useful, You can support it by donate:
+
+💝 [Make a donation](https://motmaenbash.ir/donate.html)
+
+حمایت شما باعث تداوم این پروژه و بروزرسانی مداوم آن خواهد شد 💝
+
 ## Contributing
 
 Contributions are welcome! If you have any suggestions, bug fixes, or enhancements, please feel free to create issues or pull requests.
