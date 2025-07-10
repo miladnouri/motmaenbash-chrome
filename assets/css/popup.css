@@ -1,90 +1,104 @@
 @font-face {
-    font-family: 'Vazirmatn';
-    src: url('../fonts/Vazirmatn[wght].woff2') format('woff2 supports variations'),
-         url('../fonts/Vazirmatn[wght].woff2') format('woff2-variations');
-    font-weight: 100 900;
-    font-style: normal;
-    font-display: swap;
-  }
-  
-  body {
-    background: #fff;
-    font-family: "Vazirmatn";
-    width: 330px;
-    padding: 2px 6px;
-  }
-  
-  a, a:visited{
-    text-decoration: none;
-  }
-  
-  hr{
-    clear: both;
-    margin: 0;
-    border-top: 1px dashed #e6e6e6;
-    border-bottom: 0px;
-  }
-  
-  .footer-box{
-    margin: 10px 0 8px 0;
-    color: gray;
-    font-size: 0.72rem;
-    font-weight: 500;
-  }
-  
-  .footer-box a{
-    color: #ff7200;
-    font-weight: 400;
-  }
-  
-  #status_icon {
-    margin: 20px auto 6px auto;
-    display: block;
-    max-width: 80px;
-    /* max-height: 76px; */
-  }
-  
-  .status_title_ok, .status_title_nok {
-    margin-bottom: 16px;
-    text-align: center;
-  }
-  
-  .status_title_ok{
-    color: #26bfa6;
-    font-size: 1.2rem;
-    font-weight: 600;
-  }
-  
-  .status_title_nok{
-    color: #f44336;
-    font-size: 0.85rem;
-    font-weight: 600;
-    line-height: 28px;
-  }
-  
-  .button-link, .button-link:visited {
-    float: right;
-    background: #f7f7f7;
-    margin: 6px 2px;
-    text-align: center;
-    width: calc(50% - 4px);
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: gray;
-    border-radius: 4px;
-    box-sizing: border-box;
-    border: 1px solid gray;
-    padding: 4px 4px;
-  }
-  
-  .button-link:hover, .button-link:visited:hover {
-    background: #f4f4f4;
-  }
-  
-  .right {
-    float: right;
-  }
+  font-family: 'Vazirmatn';
+  src: url('../fonts/Vazirmatn[wght].woff2') format('woff2 supports variations'),
+       url('../fonts/Vazirmatn[wght].woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
 
-  .left {
-    float: left;
-  }
+body {
+  background: #fff;
+  font-family: "Vazirmatn", sans-serif;
+  margin: 0;
+  padding: 12px;
+  width: 330px;
+  box-sizing: border-box;
+  direction: rtl;
+}
+
+.container {
+  text-align: center;
+}
+
+.status-icon {
+  display: block;
+  margin: 20px auto 10px;
+  max-width: 72px;
+}
+
+.title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #1565c0;
+}
+
+.status_title_ok, .status_title_nok {
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.status_title_ok{
+  color: #26bfa6;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.status_title_nok{
+  color: #f44336;
+  font-size: 0.70rem;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 0;
+}
+
+.button-group.single {
+  margin-top: 12px;
+}
+
+.modern-button {
+  flex: 1;
+  background-color: #1565c0;
+  color: white;
+  padding: 10px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  display: block;
+}
+
+.modern-button:hover {
+  background-color: #0d47a1;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: gray;
+  margin-top: 16px;
+  padding: 0 4px;
+}
+
+.footer a {
+  color: #ff7200;
+  text-decoration: none;
+}
+
+.right {
+  text-align: right;
+}
+
+.left {
+  text-align: left;
+}
