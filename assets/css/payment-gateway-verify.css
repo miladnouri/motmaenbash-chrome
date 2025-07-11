@@ -1,15 +1,44 @@
 #motmaenBashCornerSign {
   position: fixed !important;
   box-sizing: border-box;
-  overflow-y:scroll;
-  overflow-x:hidden;
+  overflow-y: hidden;
+  overflow-x: hidden;
   top: 0px !important;
   left: 0;
   opacity: 0.96;
   z-index: 9999999999 !important;
+  transition: all 0.3s ease;
 }
 
-#motmaenBashCornerSign img#motmaenBashCornerSignLogo{
+#motmaenBashCornerSign img#motmaenBashCornerSignLogo {
   width: 160px !important;
   max-width: 160px !important;
+  transition: all 0.3s ease;
+}
+
+/* Status classes */
+#motmaenBashCornerSign.status_title_ok {
+  opacity: 0.96;
+}
+
+#motmaenBashCornerSign.status_title_danger {
+  animation: pulse 2s infinite;
+}
+
+#motmaenBashCornerSign.status_title_danger img#motmaenBashCornerSignLogo {
+  width: 180px !important;
+  max-width: 180px !important;
+}
+
+/* Animation for dangerous sites */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }

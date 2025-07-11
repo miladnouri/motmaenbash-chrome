@@ -44,8 +44,8 @@
     /* max-height: 76px; */
   }
   
-  .status_title_ok, .status_title_nok {
-    margin-bottom: 16px;
+  .status_title_ok, .status_title_nok, .status_title_danger {
+    margin-bottom: 10px;
     text-align: center;
   }
   
@@ -62,6 +62,39 @@
     line-height: 28px;
   }
   
+  .status_title_danger {
+    color: #ff3d00;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 28px;
+  }
+  
+  /* Security details styling */
+  #security_details {
+    background-color: #fff8e1;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-bottom: 16px;
+    border: 1px solid #ffe082;
+  }
+  
+  .security_detail {
+    margin: 4px 0;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .detail_label {
+    font-weight: 600;
+    color: #616161;
+  }
+  
+  .detail_value {
+    font-weight: 500;
+    color: #ff6f00;
+  }
+  
   .button-link, .button-link:visited {
     float: right;
     background: #f7f7f7;
@@ -75,6 +108,31 @@
     box-sizing: border-box;
     border: 1px solid gray;
     padding: 4px 4px;
+  }
+  
+  /* Update database button */
+  #update_database {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 8px;
+    background-color: #e0f2f1;
+    color: #00796b;
+    border: 1px solid #b2dfdb;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  #update_database:hover {
+    background-color: #b2dfdb;
+  }
+  
+  #update_database:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
   }
   
   .button-link:hover, .button-link:visited:hover {
