@@ -66,6 +66,7 @@ body {
 .modern-button {
   flex: 1;
   background-color: #1565c0;
+  font-family: "Vazirmatn", sans-serif;
   color: white;
   padding: 10px;
   border-radius: 9999px;

@@ -20,10 +20,28 @@ class DataManager {
   // Fetch the latest data from the GitHub repository
   async fetchData() {
     try {
-      const response = await fetch(this.dataUrl);
+      // console.log('Fetching data from:', this.dataUrl);
+      
+      // Use fetch options to avoid caching issues
+      const response = await fetch(this.dataUrl, {
+        method: 'GET',
+        cache: 'no-cache',
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      
       if (!response.ok) {
-        throw new Error(`Failed to fetch data: ${response.status}`);
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
+      
+      // Check content type
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        console.warn('Warning: Response content type is not JSON:', contentType);
+        // Continue anyway - GitHub raw content might return text/plain even for JSON
+      }
+      
       const data = await response.json();
       
       // Validate data structure
@@ -31,9 +49,16 @@ class DataManager {
         throw new Error('Invalid data format: Expected an array');
       }
       
+      //console.log('Data fetched successfully, found', data.length, 'top-level arrays');
       return data;
     } catch (error) {
       console.error('Error fetching data:', error);
+
+      if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+        throw new Error('Network error: Unable to connect to the data source. Please check your internet connection.');
+      } else if (error.name === 'SyntaxError' && error.message.includes('JSON')) {
+        throw new Error('Invalid JSON format: The data source returned invalid JSON. Please check the data source.');
+      }
       throw error;
     }
   }
@@ -52,63 +77,75 @@ class DataManager {
       throw new Error('Invalid data format: Expected an array');
     }
     
-    // const knownTestHash = 'a81f5ae039854162df1235e8aa133c3cbdd490575c0f99e697577e5cb81fcba3';
-    // let testHashFound = false;
+    // console.log('Processing data structure:', data.length, 'top-level items');
     
-    for (const group of data) {
-      // Validate group structure
-      if (!group || typeof group !== 'object') {
+    // Handle nested array structure - data is an array of arrays of objects
+    for (const subArray of data) {
+      // Check if this is an array
+      if (!Array.isArray(subArray)) {
+        // console.warn('Expected array at top level, got:', typeof subArray);
         continue;
       }
       
-      // Validate required properties
-      if (!Array.isArray(group.hashes) || 
-          typeof group.type !== 'number' || 
-          typeof group.match !== 'number' || 
-          typeof group.level !== 'number') {
-        continue;
-      }
+      // console.log('Processing sub-array with', subArray.length, 'groups');
       
-      const type = group.type;
-      const level = group.level;
-      const match = group.match;
-      
-      // Process each hash in this group
-      for (const hash of group.hashes) {
-        if (typeof hash === 'string' && hash.trim() !== '') {
-          
-          let processedHash = hash.trim();
-          
-          // If the hash looks like a URL or domain, normalize it
-          if (match === 1 && (processedHash.includes('.') || processedHash.startsWith('www.'))) {
-            // For domains, remove www. if present
-            if (processedHash.startsWith('www.')) {
-              processedHash = processedHash.substring(4);
-            }
-          } else if (match === 2 && (processedHash.includes('://') || processedHash.startsWith('www.'))) {
-            // For full URLs, try to normalize using the URL class
-            try {
-              // If it's a valid URL, normalize it
-              if (processedHash.includes('://')) {
-                const normalized = this.normalizeUrl(processedHash);
-                processedHash = normalized.fullUrl;
-              } 
-              // If it starts with www but doesn't have protocol, add one temporarily to normalize
-              else if (processedHash.startsWith('www.')) {
-                const normalized = this.normalizeUrl('http://' + processedHash);
-                processedHash = normalized.fullUrl;
+      // Process each group in the sub-array
+      for (const group of subArray) {
+        // Validate group structure
+        if (!group || typeof group !== 'object') {
+          console.warn('Invalid group structure, skipping');
+          continue;
+        }
+        
+        // Validate required properties
+        if (!Array.isArray(group.hashes) || 
+            typeof group.type !== 'number' || 
+            typeof group.match !== 'number' || 
+            typeof group.level !== 'number') {
+          console.warn('Group missing required properties, skipping:', group);
+          continue;
+        }
+        
+        const type = group.type;
+        const level = group.level;
+        const match = group.match;
+        
+        // Process each hash in this group
+        for (const hash of group.hashes) {
+          if (typeof hash === 'string' && hash.trim() !== '') {
+            
+            let processedHash = hash.trim();
+            
+            // If the hash looks like a URL or domain, normalize it
+            if (match === 1 && (processedHash.includes('.') || processedHash.startsWith('www.'))) {
+              // For domains, remove www. if present
+              if (processedHash.startsWith('www.')) {
+                processedHash = processedHash.substring(4);
               }
-            } catch (error) {
-              // If normalization fails, just use the original hash
+            } else if (match === 2 && (processedHash.includes('://') || processedHash.startsWith('www.'))) {
+              // For full URLs, try to normalize using the URL class
+              try {
+                // If it's a valid URL, normalize it
+                if (processedHash.includes('://')) {
+                  const normalized = this.normalizeUrl(processedHash);
+                  processedHash = normalized.fullUrl;
+                } 
+                // If it starts with www but doesn't have protocol, add one temporarily to normalize
+                else if (processedHash.startsWith('www.')) {
+                  const normalized = this.normalizeUrl('http://' + processedHash);
+                  processedHash = normalized.fullUrl;
+                }
+              } catch (error) {
+                // If normalization fails, just use the original hash
+              }
             }
+            
+            await this.db.storeHash(processedHash, type, level, match);
+            totalHashes++;
           }
-          
-          await this.db.storeHash(processedHash, type, level, match);
-          totalHashes++;
         }
       }
     }
-    
     
     // console.log(`Processed ${totalHashes} total hashes`);
     
@@ -124,8 +161,21 @@ class DataManager {
   // Update the database with the latest data
   async updateDatabase() {
     try {
+      if (!this.initialized) await this.init();
+      
+      // console.log('Updating database from:', this.dataUrl);
+      
+      // Clear old database before update
+      await this.db.clearAll();
+      // console.log('Database cleared, fetching new data...');
+      
       const data = await this.fetchData();
-      return await this.processData(data);
+      // console.log('Data fetched successfully, processing...');
+      
+      const result = await this.processData(data);
+      // console.log('Database update completed successfully:', result);
+      
+      return result;
     } catch (error) {
       console.error('Error updating database:', error);
       throw error;
@@ -196,22 +246,7 @@ class DataManager {
     try {
       if (!this.initialized) await this.init();
       
-      // Special case for the test URL
-    //   const knownTestUrl = 'https://motmaenbash.ir/app_test.html';
-    //   const knownTestHash = 'a81f5ae039854162df1235e8aa133c3cbdd490575c0f99e697577e5cb81fcba3';
-      
-    //   // Only check the known test hash when the URL is actually the test URL
-    //   if (url.toLowerCase() === knownTestUrl.toLowerCase()) {
-    //     const directTestResult = await this.db.checkUrlHash(knownTestHash);
-    //     if (directTestResult) {
-    //       return {
-    //         secure: false,
-    //         type: directTestResult.type,
-    //         level: directTestResult.level,
-    //         match: directTestResult.match
-    //       };
-    //     }
-    //   }
+      // console.log('Checking security for URL:', url);
       
       // Normalize the URL
       const normalized = this.normalizeUrl(url);
@@ -220,6 +255,27 @@ class DataManager {
       const domainHash = await this.calculateHash(normalized.domain);
       const fullUrlHash = await this.calculateHash(normalized.fullUrl);
       const originalUrlHash = await this.calculateHash(normalized.originalUrl);
+      const directUrlHash = await this.calculateHash(url);
+      
+      // Log all hashes for debugging
+      // console.log('URL hash checks:', {
+      //   directUrlHash,
+      //   domainHash,
+      //   fullUrlHash,
+      //   originalUrlHash
+      // });
+      
+      // Check direct URL hash first
+      const directResult = await this.db.checkUrlHash(directUrlHash);
+      if (directResult) {
+        // console.log('Direct URL hash match found in database');
+        return {
+          secure: false,
+          type: directResult.type,
+          level: directResult.level,
+          match: directResult.match
+        };
+      }
       
       // Check domain hash first (match type 1)
       const domainResult = await this.db.checkDomainHash(domainHash);
@@ -277,6 +333,9 @@ class DataManager {
         match: 0
       };
     } catch (error) {
+      // console.error('Error checking URL security:', error);
+      // console.error('URL that caused the error:', url);
+      // console.error('Normalized URL data:', normalized);
       return {
         secure: null,
         type: 0,
