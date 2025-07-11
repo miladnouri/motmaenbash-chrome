@@ -136,28 +136,3 @@ body {
   font-weight: 500;
   color: #ff6f00;
 }
-
- /* Update database button */
- #update_database {
-  display: block;
-  width: 100%;
-  margin: 10px 0;
-  padding: 8px;
-  background-color: #e0f2f1;
-  color: #00796b;
-  border: 1px solid #b2dfdb;
-  border-radius: 4px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-#update_database:hover {
-  background-color: #b2dfdb;
-}
-
-#update_database:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}

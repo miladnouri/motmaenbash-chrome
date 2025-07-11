@@ -61,32 +61,26 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
-  // Add database update button
-  const updateButton = document.createElement('button');
-  updateButton.id = 'update_database';
-  updateButton.className = 'button-link';
-  updateButton.textContent = 'بروزرسانی پایگاه داده';
-  updateButton.addEventListener('click', function() {
-    updateButton.textContent = 'در حال بروزرسانی...';
-    updateButton.disabled = true;
-    
-    // Send message to background script to update database
-    chrome.runtime.sendMessage({ action: 'updateDatabase' }, function(response) {
-      if (response && response.success) {
-        updateButton.textContent = 'بروزرسانی با موفقیت انجام شد';
-        setTimeout(() => {
-          updateButton.textContent = 'بروزرسانی پایگاه داده';
+  // Handle database update button
+  const updateButton = document.getElementById('update_database');
+  if (updateButton) {
+    updateButton.addEventListener('click', function() {
+      updateButton.textContent = 'در حال بروزرسانی...';
+      updateButton.disabled = true;
+      
+      // Send message to background script to update database
+      chrome.runtime.sendMessage({ action: 'updateDatabase' }, function(response) {
+        if (response && response.success) {
+          updateButton.textContent = 'بروزرسانی با موفقیت انجام شد';
+          setTimeout(() => {
+            updateButton.textContent = 'بروزرسانی پایگاه داده';
+            updateButton.disabled = false;
+          }, 2000);
+        } else {
+          updateButton.textContent = 'خطا در بروزرسانی';
           updateButton.disabled = false;
-        }, 2000);
-      } else {
-        updateButton.textContent = 'خطا در بروزرسانی';
-        updateButton.disabled = false;
-      }
+        }
+      });
     });
-  });
-  
-  const pageDiv = document.querySelector('.page');
-  if (pageDiv) {
-    pageDiv.appendChild(updateButton);
   }
 });

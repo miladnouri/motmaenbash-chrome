@@ -117,11 +117,26 @@ async function checkForValidUrl(tabId, changeInfo, tab) {
       // Send message to content script if it's a shaparak.ir domain
       const url = new URL(tab.url);
       if (url.hostname.match(/\.shaparak\.ir$/i)) {
-        chrome.tabs.sendMessage(tabId, {
-          action: 'updateSecurity',
-          securityResult: securityResult,
-          message: message
-        });
+        try {
+          // First check if the tab still exists
+          chrome.tabs.get(tabId, (tabInfo) => {
+            if (chrome.runtime.lastError) {
+              // console.log(`Tab ${tabId} no longer exists, skipping message send`);
+              return;
+            }
+            
+            // Tab exists, send the message
+            chrome.tabs.sendMessage(tabId, {
+              action: 'updateSecurity',
+              securityResult: securityResult,
+              message: message
+            }).catch(err => {
+              console.log(`Error sending message to tab ${tabId}:`, err);
+            });
+          });
+        } catch (msgError) {
+          console.error('Error sending message to tab:', msgError);
+        }
       }
     } catch (error) {
       console.error('Error checking URL security:', error);
