@@ -3,49 +3,61 @@
 
 import { getTypeName, getLevelName } from './utils.js';
 
-document.addEventListener('DOMContentLoaded', function() {
+// Function to update popup content based on current tab or stored security data
+function updatePopupContent() {
   const statusIcon = document.getElementById('status_icon');
   const statusTitle = document.getElementById('status_title');
-  const detailsContainer = document.createElement('div');
+  const detailsContainer = document.getElementById('security_details') || document.createElement('div');
   detailsContainer.id = 'security_details';
+  
+  // Clear previous content
+  detailsContainer.innerHTML = '';
+  if (detailsContainer.parentNode) {
+    detailsContainer.parentNode.removeChild(detailsContainer);
+  }
   
   // Get security information from storage
   chrome.storage.local.get(['currentUrl', 'securityResult', 'message'], function(data) {
-    if (data.currentUrl && data.message) {
-      statusIcon.src = data.message.icon;
-      statusTitle.className = data.message.className || 'status_title_nok';
-      statusTitle.innerHTML = data.message.title;
-      
-      if (data.securityResult && data.securityResult.secure === false) {
-        const typeName = getTypeName(data.securityResult.type);
-        const levelName = getLevelName(data.securityResult.level);
-        const matchType = data.securityResult.match === 1 ? 'دامنه' : 'آدرس کامل';
+    // Get current tab to compare with stored data
+    chrome.tabs.query({
+      active: true,
+      currentWindow: true
+    }, function(tabs) {
+      if (tabs && tabs[0] && tabs[0].url) {
+        const currentTabUrl = tabs[0].url;
         
-        detailsContainer.innerHTML = `
-          <div class="security_detail">
-            <span class="detail_label">نوع تهدید:</span> 
-            <span class="detail_value">${typeName}</span>
-          </div>
-          <div class="security_detail">
-            <span class="detail_label">سطح هشدار:</span> 
-            <span class="detail_value">${levelName}</span>
-          </div>
-          <div class="security_detail">
-            <span class="detail_label">تطابق:</span> 
-            <span class="detail_value">${matchType}</span>
-          </div>
-        `;
-        
-        statusTitle.parentNode.insertBefore(detailsContainer, statusTitle.nextSibling);
-      }
-    } else {
-      // If no data is available, get current tab information
-      chrome.tabs.query({
-        active: true,
-        currentWindow: true
-      }, function(tabs) {
-        if (tabs && tabs[0] && tabs[0].url) {
-          const url = new URL(tabs[0].url);
+        // Check if stored data matches current tab
+        if (data.currentUrl && data.message && data.currentUrl === currentTabUrl) {
+          // Display stored security information
+          statusIcon.src = data.message.icon;
+          statusTitle.className = data.message.className || 'status_title_nok';
+          statusTitle.innerHTML = data.message.title;
+          
+          if (data.securityResult && data.securityResult.secure === false) {
+            const typeName = getTypeName(data.securityResult.type);
+            const levelName = getLevelName(data.securityResult.level);
+            const matchType = data.securityResult.match === 1 ? 'دامنه' : 'آدرس کامل';
+            
+            detailsContainer.innerHTML = `
+              <div class="security_detail">
+                <span class="detail_label">نوع تهدید:</span> 
+                <span class="detail_value">${typeName}</span>
+              </div>
+              <div class="security_detail">
+                <span class="detail_label">سطح هشدار:</span> 
+                <span class="detail_value">${levelName}</span>
+              </div>
+              <div class="security_detail">
+                <span class="detail_label">تطابق:</span> 
+                <span class="detail_value">${matchType}</span>
+              </div>
+            `;
+            
+            statusTitle.parentNode.insertBefore(detailsContainer, statusTitle.nextSibling);
+          }
+        } else {
+          // If no matching data, show default content based on current URL
+          const url = new URL(currentTabUrl);
           
           if (url.hostname.match(/\.shaparak\.ir$/i) && url.protocol === 'https:') {
             statusTitle.className = 'status_title_ok';
@@ -57,7 +69,24 @@ document.addEventListener('DOMContentLoaded', function() {
             statusIcon.src = 'assets/images/icon_128.png';
           }
         }
-      });
+      }
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize popup content
+  updatePopupContent();
+  
+  // Listen for tab changes while popup is open
+  chrome.tabs.onActivated.addListener(function(activeInfo) {
+    updatePopupContent();
+  });
+  
+  // Listen for URL changes in the current tab
+  chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+    if (changeInfo.url) {
+      updatePopupContent();
     }
   });
   
