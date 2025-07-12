@@ -66,6 +66,7 @@ body {
 .modern-button {
   flex: 1;
   background-color: #1565c0;
+  font-family: "Vazirmatn", sans-serif;
   color: white;
   padding: 10px;
   border-radius: 9999px;
@@ -101,4 +102,38 @@ body {
 
 .left {
   text-align: left;
+}
+
+
+.status_title_danger {
+  color: #ff3d00;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 28px;
+}
+
+/* Security details styling */
+#security_details {
+  background-color: #fff8e1;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-bottom: 16px;
+  border: 1px solid #ffe082;
+}
+
+.security_detail {
+  margin: 4px 0;
+  font-size: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.detail_label {
+  font-weight: 600;
+  color: #616161;
+}
+
+.detail_value {
+  font-weight: 500;
+  color: #ff6f00;
 }

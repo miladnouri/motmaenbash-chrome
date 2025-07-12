@@ -16,7 +16,8 @@
     "default_popup": "popup.html",
     "default_title": "MotmaenBash"
   },
-  "permissions": [ "tabs" ],
+  "permissions": [ "tabs", "storage", "alarms" ],
+  "host_permissions": [ "https://raw.githubusercontent.com/*" ],
   "background": {
     "service_worker": "assets/js/background.js",
     "type": "module"
